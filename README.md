@@ -105,7 +105,11 @@ Each `.md` file in the track directory becomes one entry:
 - **`_index.md` is skipped** (it is the track landing page, not an entry).
 - **Slug** is the filename without `.md`. The entry URL is
   `<siteUrl>/<track>/<slug>/`, matching how scriptor-markdown-pages
-  resolves the same file.
+  resolves the same file. Keep filenames within `[a-z0-9_-]`: when the
+  feed is paired with scriptor-markdown-pages, that plugin sanitises
+  every URL segment to `[a-z0-9_-]`, so a dot (or other character) in
+  the filename produces a feed link that resolves to a 404. Use
+  `2026-05-22-release-v0-1-7.md`, not `…v0.1.7.md`.
 - **Title** comes from `title:` frontmatter, falling back to the slug.
 - **Sort** is by `date:` frontmatter, newest first; ties break on title.
   A file without a parseable `date:` falls back to its mtime, so an
