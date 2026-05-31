@@ -22,13 +22,12 @@ composer require bigins/scriptor-markdown-feed:^0.1
 
 The first command adds a VCS repository to your `composer.json`; without
 it `composer require` reports *"Could not find a version of package …"*.
-If you install into Scriptor itself, its `composer.json` already ships a
-`repositories` block covering `bigins/*` plugins, so the first command is
-not needed there and a plain `composer require bigins/scriptor-markdown-feed`
-works.
+Scriptor ships a clean `composer.json` with no plugin repositories
+declared, so this step is required when installing into Scriptor too.
 
-In Docker, add it to the `SCRIPTOR_PLUGINS` build arg like any other
-plugin (see Scriptor's install docs).
+In Docker, supply the repo URL and the package spec through the
+`SCRIPTOR_PLUGIN_REPOS` and `SCRIPTOR_PLUGINS` build args instead (see
+Scriptor's install docs).
 
 ## Activate
 
