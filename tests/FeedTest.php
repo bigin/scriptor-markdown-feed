@@ -34,6 +34,42 @@ final class FeedTest extends TestCase
     }
 
     /**
+     * @param array<string,string> $server
+     * @dataProvider schemeProvider
+     */
+    public function testDetectSchemeHonoursProxyHeaders(array $server, string $expected): void
+    {
+        $saved = $_SERVER;
+        unset($_SERVER['HTTPS'], $_SERVER['HTTP_X_FORWARDED_PROTO']);
+        foreach ($server as $key => $value) {
+            $_SERVER[$key] = $value;
+        }
+
+        $method = new \ReflectionMethod(Feed::class, 'detectScheme');
+        $method->setAccessible(true);
+
+        try {
+            self::assertSame($expected, $method->invoke(null));
+        } finally {
+            $_SERVER = $saved;
+        }
+    }
+
+    /**
+     * @return array<string,array{0:array<string,string>,1:string}>
+     */
+    public static function schemeProvider(): array
+    {
+        return [
+            'no signal'            => [[], 'http'],
+            'direct https'         => [['HTTPS' => 'on'], 'https'],
+            'forwarded https'      => [['HTTP_X_FORWARDED_PROTO' => 'https'], 'https'],
+            'forwarded https list' => [['HTTP_X_FORWARDED_PROTO' => 'https, http'], 'https'],
+            'forwarded http'       => [['HTTP_X_FORWARDED_PROTO' => 'http'], 'http'],
+        ];
+    }
+
+    /**
      * @return list<Entry>
      */
     private function entries(): array

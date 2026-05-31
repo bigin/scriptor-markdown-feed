@@ -98,7 +98,25 @@ final class Feed
 
     private static function detectSiteUrl(): string
     {
-        $scheme = (($_SERVER['HTTPS'] ?? '') === 'on') ? 'https' : 'http';
-        return $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost');
+        return self::detectScheme() . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost');
+    }
+
+    /**
+     * Resolve the request scheme, honouring a TLS-terminating reverse
+     * proxy. Direct HTTPS sets `$_SERVER['HTTPS']` to 'on'; behind
+     * nginx/Traefik the original scheme arrives in `X-Forwarded-Proto`
+     * (possibly a comma-separated list, client value first).
+     */
+    private static function detectScheme(): string
+    {
+        $forwarded = strtolower(trim((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '')));
+        if ($forwarded !== '') {
+            $first = trim(explode(',', $forwarded)[0]);
+            if ($first === 'https' || $first === 'http') {
+                return $first;
+            }
+        }
+
+        return (($_SERVER['HTTPS'] ?? '') === 'on') ? 'https' : 'http';
     }
 }
