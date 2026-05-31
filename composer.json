@@ -1,0 +1,39 @@
+{
+    "name": "bigins/scriptor-markdown-feed",
+    "description": "Atom / RSS 2.0 feeds generated from a scriptor-markdown-pages content track.",
+    "type": "scriptor-plugin",
+    "keywords": ["scriptor", "scriptor-plugin", "atom", "rss", "feed", "markdown"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "bigin",
+            "email": "juri.ehret@gmail.com",
+            "homepage": "https://ehret-studio.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bigins\\ScriptorMarkdownFeed\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Bigins\\ScriptorMarkdownFeed\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "scriptor": {
+            "plugin": "Bigins\\ScriptorMarkdownFeed\\Plugin"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}
